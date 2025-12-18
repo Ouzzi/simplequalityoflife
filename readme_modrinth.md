@@ -25,6 +25,7 @@ Special suffixes for Nametags give you control over mob behavior:
 
 ### ⚔️ Combat & Tools
 * **Sharpness Cuts Grass:** Hate tall grass blocking your hits? Weapons with the *Sharpness* enchantment will cut through grass and flowers when you attack.
+* **Full Durability Bonus:** Tools and weapons at full durability gain a slight boost in efficiency or damage, rewarding careful use.
 
 ### 🏦 Server Utils
 * **Vault Cooldown:** Admins can configure the cooldown period for Vault blocks (in days) to balance rewards on servers.

@@ -63,7 +63,7 @@ public class SimplequalityoflifeConfig implements ConfigData {
         public double fullDurabilityThreshold = 0.90; // Ab 90% Haltbarkeit
 
         @ConfigEntry.Gui.Tooltip
-        public double fullDurabilityBonusMultiplier = 1.15; // 15% Bonus (Efficiency & Damage)
+        public double fullDurabilityBonusMultiplier = 1.5; // 15% Bonus (Efficiency & Damage)
 
     }
 }

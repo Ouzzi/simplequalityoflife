@@ -28,6 +28,7 @@ All features can be configured via `cloth-config` (in-game) or the `config/simpl
 | **Farmland Protection** | *Feather Falling* boots prevent farmland trampling. | `qOL.preventFarmlandTrampleWithFeatherFalling` |
 | **Hoe Harvesting** | Right-click crops with a hoe to harvest and replant. | `qOL.enableHoeHarvest` |
 | **Sharpness Cut** | Sharpness weapons break grass/flowers on swing. | `qOL.sharpnessCutsGrass` |
+| **Full Durability Bonus** | Tools with full durability gain extra efficiency or damage. | `qOL.fullDurabilityBonus.*` |
 
 ### 🏷️ Nametag Features
 Renaming mobs with specific suffixes triggers special effects.
@@ -70,3 +71,16 @@ Admin commands to change settings without editing files manually. Requires Level
 
 ## ⚖️ License
 This project is licensed under the **CC0 1.0 Universal** license. You are free to use, modify, and distribute this software without restriction.
+
+
+![Growup Prevention](https://cdn.modrinth.com/data/cached_images/112cea39f1f83db1ebff79b03649f9ad3dff1ca5.png)
+
+![Mute Mobs](https://cdn.modrinth.com/data/cached_images/2ecdf358a8b19478a3573a7c2d74ba69d3858d81.png)
+
+![Feather Falling Prevents Destruction](https://cdn.modrinth.com/data/cached_images/427d03fdfdd11cc661d9bd5aa003fff7f2be91eb.png)
+
+![Ladder Speed](https://cdn.modrinth.com/data/cached_images/a80130592d19294197920bec466956ccc92f0aad.png)
+
+![Replant With Hoe](https://cdn.modrinth.com/data/cached_images/b557b46032e298fbb606249bb6df8994b1cac0d4.png)
+
+![Sharpness Cutts Trough Grass](https://cdn.modrinth.com/data/cached_images/a01611f6d33c106a9c05864e9dd0bc28844e448a.png)
