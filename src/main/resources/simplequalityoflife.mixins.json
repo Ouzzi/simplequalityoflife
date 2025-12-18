@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "package": "com.simplequalityoflife.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "EntityMuteMixin",
+    "FarmlandTrampleMixin",
+    "GrassOutlineMixin",
+    "LadderSpeedMixin",
+    "PassiveEntityMixin",
+    "SharpnessGrassCutMixin",
+    "VaultBlockEntityMixin",
+    "VaultBlockEntityServerMixin",
+    "VaultServerDataAccessor",
+    "VaultServerDataMixin",
+    "VaultSharedDataAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+	}
+}
