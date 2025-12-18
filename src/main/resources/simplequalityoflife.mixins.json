@@ -5,6 +5,8 @@
   "mixins": [
     "EntityMuteMixin",
     "FarmlandTrampleMixin",
+    "FullDurabilityDamageMixin",
+    "FullDurabilityEfficiencyMixin",
     "GrassOutlineMixin",
     "LadderSpeedMixin",
     "PassiveEntityMixin",

@@ -240,5 +240,11 @@
     "text.autoconfig.simplefun.option.visuals.heldItemTooltips.enable": "Enable Held Item Tooltips",
     "text.autoconfig.simplefun.option.visuals.heldItemTooltips.showDurability": "Show Durability",
     "text.autoconfig.simplefun.option.visuals.heldItemTooltips.showEnchantments": "Show Enchantments",
-    "text.autoconfig.simplefun.option.visuals.heldItemTooltips.maxEnchantments": "Max Enchantments to Show"
+    "text.autoconfig.simplefun.option.visuals.heldItemTooltips.maxEnchantments": "Max Enchantments to Show",
+  "text.autoconfig.simplefun.option.qOL.enableFullDurabilityBonus": "Full Durability Bonus",
+  "text.autoconfig.simplefun.option.qOL.enableFullDurabilityBonus.@Tooltip": "Grants a bonus to mining speed and damage when tools/weapons are near full durability.",
+  "text.autoconfig.simplefun.option.qOL.fullDurabilityThreshold": "Durability Threshold (0.0 - 1.0)",
+  "text.autoconfig.simplefun.option.qOL.fullDurabilityThreshold.@Tooltip": "The percentage of durability required to trigger the bonus (e.g., 0.9 for 90%).",
+  "text.autoconfig.simplefun.option.qOL.fullDurabilityBonusMultiplier": "Bonus Multiplier",
+  "text.autoconfig.simplefun.option.qOL.fullDurabilityBonusMultiplier.@Tooltip": "The multiplier applied to speed/damage (e.g., 1.15 for +15%)."
 }

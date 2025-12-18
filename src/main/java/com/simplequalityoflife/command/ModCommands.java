@@ -40,6 +40,15 @@ public class ModCommands {
 
                     // 8. Tweaks (Alle Features)
                     .then(CommandManager.literal("tweaks")
+                            .then(CommandManager.literal("fullDurabilityBonus")
+                                    .then(CommandManager.argument("enabled", BoolArgumentType.bool())
+                                            .executes(ctx -> {
+                                                boolean val = BoolArgumentType.getBool(ctx, "enabled");
+                                                Simplequalityoflife.getConfig().qOL.enableFullDurabilityBonus = val;
+                                                saveConfig();
+                                                ctx.getSource().sendFeedback(() -> Text.literal("Full Durability Bonus enabled: " + val), true);
+                                                return 1;
+                                            })))
                             // AutoWalk
                             .then(CommandManager.literal("autowalk")
                                     .then(CommandManager.argument("enabled", BoolArgumentType.bool())

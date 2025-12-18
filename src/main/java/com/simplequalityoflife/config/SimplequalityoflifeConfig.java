@@ -56,5 +56,14 @@ public class SimplequalityoflifeConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public int vaultCooldownDays = 1;
 
+        @ConfigEntry.Gui.Tooltip
+        public boolean enableFullDurabilityBonus = true;
+
+        @ConfigEntry.Gui.Tooltip
+        public double fullDurabilityThreshold = 0.90; // Ab 90% Haltbarkeit
+
+        @ConfigEntry.Gui.Tooltip
+        public double fullDurabilityBonusMultiplier = 1.15; // 15% Bonus (Efficiency & Damage)
+
     }
 }
