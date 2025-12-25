@@ -22,7 +22,7 @@ public class SimplequalityoflifeConfig implements ConfigData {
 
     public static class QOL {
         @ConfigEntry.Gui.Tooltip
-        public boolean enableAutowalk = true;
+        public boolean enableAutowalk = false;
 
         @ConfigEntry.Gui.Tooltip
         public List<String> nametagMuteSuffixes = new ArrayList<>(Arrays.asList("_mute", "_shhh"));
@@ -54,7 +54,7 @@ public class SimplequalityoflifeConfig implements ConfigData {
         public boolean enableHoeHarvest = true;
 
         @ConfigEntry.Gui.Tooltip
-        public int vaultCooldownDays = 1;
+        public int vaultCooldownDays = 100;
 
         @ConfigEntry.Gui.Tooltip
         public boolean enableFullDurabilityBonus = true;
@@ -63,7 +63,7 @@ public class SimplequalityoflifeConfig implements ConfigData {
         public double fullDurabilityThreshold = 0.90; // Ab 90% Haltbarkeit
 
         @ConfigEntry.Gui.Tooltip
-        public double fullDurabilityBonusMultiplier = 1.5; // 15% Bonus (Efficiency & Damage)
+        public double fullDurabilityBonusMultiplier = 1.5; // 50% Bonus (Efficiency & Damage)
 
     }
 }
