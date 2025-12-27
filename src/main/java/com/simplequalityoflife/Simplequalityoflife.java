@@ -2,6 +2,7 @@ package com.simplequalityoflife;
 
 import com.simplequalityoflife.command.ModCommands;
 import com.simplequalityoflife.config.SimplequalityoflifeConfig;
+import com.simplequalityoflife.event.HoeHarvestHandler;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -23,6 +24,7 @@ public class Simplequalityoflife implements ModInitializer {
 
 
         ModCommands.register();
+        HoeHarvestHandler.register();
 	}
 
     public static SimplequalityoflifeConfig getConfig() { return CONFIG; }

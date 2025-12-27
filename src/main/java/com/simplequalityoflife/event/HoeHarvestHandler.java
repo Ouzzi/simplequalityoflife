@@ -113,7 +113,7 @@ public class HoeHarvestHandler {
 
         // Haltbarkeit abziehen (1 Schaden)
         if (!player.isCreative()) {
-            tool.damage(2, player, EquipmentSlot.MAINHAND);
+            tool.damage(1, player, EquipmentSlot.MAINHAND);
         }
 
         // Arm-Animation
