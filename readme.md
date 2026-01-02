@@ -1,6 +1,6 @@
 # SimpleQualityOfLife - Documentation
 
-**SimpleQualityOfLife** is a modular Fabric mod for Minecraft 1.21+ that focuses on utility tweaks, farming improvements, and server administration tools.
+**SimpleQualityOfLife** is a modular Fabric mod for Minecraft 1.21+ that focuses on utility tweaks, movement improvements, farming enhancements, and server administration tools.
 
 ## 📥 Installation & Dependencies
 
@@ -14,9 +14,11 @@ To use SimpleQualityOfLife, install the following:
 
 All features can be configured via `cloth-config` (in-game) or the `config/simplequalityoflife.json` file.
 
-### 🎮 Gameplay Tweaks
+### 🎮 Gameplay & Movement Tweaks
 | Feature | Description | Config Key |
 | :--- | :--- | :--- |
+| **Manual Crawling** | Press **C** (default) or type `/crawl` to drop into a crawling pose. Jump to stand up. | N/A (Keybind) |
+| **Frost Walker Fix** | Frost Walker boots prevent sinking into Powder Snow (no leather boots needed). | `qOL.frostWalkerWalkOnPowderSnow` |
 | **Auto-Walk** | Toggles automatic forward movement via keybind. | `qOL.enableAutowalk` |
 | **Ladder Climb Speed** | Multiplier for climbing up ladders (Vanilla ~0.2). | `qOL.ladderClimbingSpeed` |
 | **Ladder Slide** | Allows sliding down ladders faster. | `qOL.enableFastLadderSlide`, `qOL.ladderSlideSpeed` |
@@ -42,22 +44,28 @@ Renaming mobs with specific suffixes triggers special effects.
 | **Vault Cooldown** | Sets the cooldown (in Minecraft days) for looting Vaults. | `qOL.vaultCooldownDays` |
 
 ## 💻 Commands
-Admin commands to change settings without editing files manually. Requires Level 4 OP.
 
-### General Configuration
+### General Commands (All Players)
+* `/crawl`: Toggles the crawling state. Can also be triggered via the configured keybind (Default: `C`).
+
+### Admin Configuration (Level 4 OP)
+Admin commands to change settings without editing files manually.
+
+#### General Configuration
+* `/simplequalityoflife tweaks frostWalkerSnow <true|false>`
 * `/simplequalityoflife tweaks autowalk <true|false>`
 * `/simplequalityoflife tweaks farmlandProtect <true|false>`
 * `/simplequalityoflife tweaks hoeHarvest <true|false>`
 * `/simplequalityoflife tweaks ladderSpeed <value>`
 * `/simplequalityoflife tweaks sharpnessCut <true|false>`
 
-### Nametag Management
+#### Nametag Management
 * `/simplequalityoflife tweaks muteSuffixes list`
 * `/simplequalityoflife tweaks muteSuffixes add <suffix>`
 * `/simplequalityoflife tweaks muteSuffixes remove <suffix>`
 * *(Same commands apply to `babySuffixes`)*
 
-### Vault Management
+#### Vault Management
 * `/simplequalityoflife vaults cooldown <days>`: Sets the global vault cooldown.
 
 ## 🏗️ Building from Source
