@@ -3,9 +3,11 @@ package com.simplequalityoflife.command;
 import com.mojang.brigadier.arguments.*;
 import com.simplequalityoflife.Simplequalityoflife;
 import com.simplequalityoflife.config.SimplequalityoflifeConfig;
+import com.simplequalityoflife.util.CrawlAccessor;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -20,11 +22,22 @@ public class ModCommands {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 
+            dispatcher.register(CommandManager.literal("crawl")
+                    .executes(ctx -> {
+                        if (ctx.getSource().getEntity() instanceof PlayerEntity player) {
+                            CrawlAccessor crawler = (CrawlAccessor) player;
+                            boolean newState = !crawler.simpleQualityOfLife$isCrawling();
+                            crawler.simpleQualityOfLife$setCrawling(newState);
+                            // Kein Feedback im Chat, um Spam beim Drücken der Taste zu vermeiden
+                        }
+                        return 1;
+                    }));
+
+
             // --- CONFIG COMMANDS (simplequalityoflife) ---
             dispatcher.register(CommandManager.literal("simplequalityoflife")
                     // Level 4 für Admin-Befehle (Config Änderungen)
                     .requires(source -> checkPermission(source, 4))
-
                     // 2. Vaults
                     .then(CommandManager.literal("vaults")
                             .then(CommandManager.literal("cooldown")

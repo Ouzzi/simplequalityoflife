@@ -19,6 +19,8 @@ public class SimplequalityoflifeConfig implements ConfigData {
         CAMERA, ALWAYS
     }
 
+    @ConfigEntry.Gui.Tooltip
+    public boolean frostWalkerWalkOnPowderSnow = true;
 
     public static class QOL {
         @ConfigEntry.Gui.Tooltip
