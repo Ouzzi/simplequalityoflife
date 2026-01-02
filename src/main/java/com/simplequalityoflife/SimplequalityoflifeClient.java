@@ -23,8 +23,8 @@ public class SimplequalityoflifeClient implements ClientModInitializer {
         crawlKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.simplequalityoflife.crawl", // Translation Key
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_C,
-                QOL_CATEGORY // Hier das Kategorie-Objekt übergeben
+                GLFW.GLFW_KEY_P,
+                QOL_CATEGORY
         ));
 
         // Event Loop für Tastendruck
