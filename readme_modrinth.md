@@ -1,35 +1,49 @@
 # 🛠️ SimpleQualityOfLife
-**Essential Gameplay Improvements & Time Savers**
+**Essenzielle Gameplay-Verbesserungen, Bewegungs-Tweaks & Zeitsparer**
 
-SimpleQualityOfLife is a collection of logical tweaks designed to smooth out the rough edges of Minecraft. Whether it's climbing ladders faster, protecting your crops, or managing mobs with nametags, this mod adds the features you didn't know you needed until now.
+**SimpleQualityOfLife** ist eine Sammlung logischer Anpassungen, die darauf ausgelegt sind, die Ecken und Kanten von Minecraft zu glätten. Egal, ob du auf Knopfdruck krabbeln möchtest, schneller Leitern erklimmen willst oder deine Felder schützen musst – diese Mod fügt Features hinzu, von denen du nicht wusstest, dass du sie brauchst, bis du sie hast.
 
-**Server Friendly:** Most features are configurable and work great on SMPs!
+**Serverfreundlich:** Die meisten Funktionen sind konfigurierbar und funktionieren hervorragend auf Multiplayer-Servern (SMPs)!
 
 ![Banner](https://cdn.modrinth.com/data/cached_images/158e2b547c35b0f83422916f39cca1f1e081b7d3.png)
 
-## ✨ Feature Highlights
+## ✨ Neue Features
 
-### 🪜 Better Movement
-* **Faster Ladders:** Climb up ladders significantly faster (configurable speed).
-* **Ladder Sliding:** Look down or press a key to slide down ladders quickly. No more slow descents!
-* **Auto-Walk:** Press a key to keep walking automatically. Perfect for long journeys across the map.
+* **🐛 Manuelles Krabbeln (Toggle Crawl):**
+    * Drücke eine Taste (Standard: `P`) oder nutze den Befehl `/crawl`, um dich sofort in die Krabbel-Animation zu legen.
+    * Perfekt, um 1-Block hohe Höhlen oder Schächte zu erkunden, ohne Falltüren platzieren zu müssen.
+    * **Intuitive Steuerung:** Drücke einfach die Sprungtaste, um das Krabbeln abzubrechen und wieder aufzustehen!
+* **❄️ Frostläufer Upgrade (Frost Walker Buff):**
+    * Keine Lust mehr, ständig auf Lederstiefel zu wechseln?
+    * Schuhe mit der **Frostläufer**-Verzauberung verhindern nun, dass du in Pulverschnee einsinkst!
 
-### 🌾 Farming Evolved
-* **Crop Protection:** Wearing *Feather Falling* boots prevents you from trampling farmland, even if you jump on it.
-* **Easy Harvest:** Right-click fully grown crops with a hoe to harvest and automatically replant them in one go.
+---
 
-### 🏷️ Nametag Utilities
-Special suffixes for Nametags give you control over mob behavior:
-* **Silence Mobs:** Rename a mob with `_mute` or `_shhh` to stop it from making sounds.
-* **Eternal Youth:** Rename a baby animal `_baby` or `_small` to prevent it from ever growing up.
+## 🚀 Bessere Bewegung
+* **Schnellere Leitern:** Klettere Leitern deutlich schneller hoch (Geschwindigkeit ist konfigurierbar).
+* **Leitern Rutschen:** Schaue nach unten oder drücke eine Taste, um Leitern schnell hinunterzurutschen. Kein langsames Absteigen mehr!
+* **Auto-Walk:** Drücke eine Taste, um automatisch weiterzulaufen. Ideal für lange Reisen über die Karte.
 
-### ⚔️ Combat & Tools
-* **Sharpness Cuts Grass:** Hate tall grass blocking your hits? Weapons with the *Sharpness* enchantment will cut through grass and flowers when you attack.
-* **Full Durability Bonus:** Tools and weapons at full durability gain a slight boost in efficiency or damage, rewarding careful use.
+## 🌾 Landwirtschaft & Farming
+* **Feldschutz:** Wenn du Stiefel mit *Federfall* (Feather Falling) trägst, zertrampelst du keinen Ackerboden mehr – selbst wenn du darauf springst.
+* **Einfaches Ernten:** Mache einen Rechtsklick mit einer Hacke auf ausgewachsene Pflanzen, um sie zu ernten und im gleichen Zug automatisch neu anzupflanzen.
 
-### 🏦 Server Utils
-* **Vault Cooldown:** Admins can configure the cooldown period for Vault blocks (in days) to balance rewards on servers.
+## 🏷️ Namensschild-Funktionen (Nametags)
+Steuere das Verhalten von Mobs durch spezielle Namen:
+* **Mobs stumm schalten:** Benenne einen Mob in `_mute` oder `_shhh` um, damit er keine Geräusche mehr macht.
+* **Ewige Jugend:** Benenne ein Tierbaby in `_baby` oder `_small` um, damit es niemals erwachsen wird.
 
-## ⚙️ Configuration
-Customize everything! Press `M` (or your ModMenu hotkey) to toggle features or adjust speeds.
-* Requires: **Fabric API**, **Cloth Config**, and **Mod Menu**.
+## ⚔️ Kampf & Werkzeuge
+* **Schärfe schneidet Gras:** Nervt dich hohes Gras im Kampf? Waffen mit der *Schärfe*-Verzauberung schneiden bei einem Angriff automatisch Gras und Blumen weg.
+* **Haltbarkeits-Bonus:** Werkzeuge und Waffen mit 100% Haltbarkeit erhalten einen leichten Bonus auf Effizienz oder Schaden – eine Belohnung für gute Pflege.
+
+## ⚙️ Konfiguration & Befehle
+Alles lässt sich anpassen! Drücke `M` (oder deinen ModMenu-Hotkey), um Features an- oder auszuschalten.
+
+* **/crawl**: Aktiviert/Deaktiviert den Krabbel-Modus.
+* **/simplequalityoflife**: Admin-Befehle für Servereinstellungen (z.B. Vault-Cooldowns).
+
+**Abhängigkeiten:**
+* [Fabric API](https://modrinth.com/mod/fabric-api)
+* [Cloth Config](https://modrinth.com/mod/cloth-config)
+* [Mod Menu](https://modrinth.com/mod/modmenu) (Optional, für In-Game Konfiguration)
