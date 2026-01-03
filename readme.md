@@ -15,14 +15,14 @@ To use SimpleQualityOfLife, install the following:
 All features can be configured via `cloth-config` (in-game) or the `config/simplequalityoflife.json` file.
 
 ### 🎮 Gameplay & Movement Tweaks
-| Feature | Description | Config Key |
-| :--- | :--- | :--- |
-| **Manual Crawling** | Press **C** (default) or type `/crawl` to drop into a crawling pose. Jump to stand up. | N/A (Keybind) |
-| **Frost Walker Fix** | Frost Walker boots prevent sinking into Powder Snow (no leather boots needed). | `qOL.frostWalkerWalkOnPowderSnow` |
-| **Auto-Walk** | Toggles automatic forward movement via keybind. | `qOL.enableAutowalk` |
-| **Ladder Climb Speed** | Multiplier for climbing up ladders (Vanilla ~0.2). | `qOL.ladderClimbingSpeed` |
-| **Ladder Slide** | Allows sliding down ladders faster. | `qOL.enableFastLadderSlide`, `qOL.ladderSlideSpeed` |
-| **Slide Activation** | How to trigger the slide (Camera angle or Always). | `qOL.ladderSlideActivation` |
+| Feature | Description                                                                            | Config Key |
+| :--- |:---------------------------------------------------------------------------------------| :--- |
+| **Manual Crawling** | Press **P** (default) or type `/crawl` to drop into a crawling pose. Jump to stand up. | N/A (Keybind) |
+| **Frost Walker Fix** | Frost Walker boots prevent sinking into Powder Snow (no leather boots needed).         | `qOL.frostWalkerWalkOnPowderSnow` |
+| **Auto-Walk** | Toggles automatic forward movement via keybind.                                        | `qOL.enableAutowalk` |
+| **Ladder Climb Speed** | Multiplier for climbing up ladders (Vanilla ~0.2).                                     | `qOL.ladderClimbingSpeed` |
+| **Ladder Slide** | Allows sliding down ladders faster.                                                    | `qOL.enableFastLadderSlide`, `qOL.ladderSlideSpeed` |
+| **Slide Activation** | How to trigger the slide (Camera angle or Always).                                     | `qOL.ladderSlideActivation` |
 
 ### 🌾 Farming & Interaction
 | Feature | Description | Config Key |
