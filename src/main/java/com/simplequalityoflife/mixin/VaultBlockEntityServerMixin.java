@@ -27,45 +27,41 @@ public class VaultBlockEntityServerMixin {
     // --- TICK LOGIK ---
     @Inject(method = "tick", at = @At("HEAD"))
     private static void tickCooldowns(ServerWorld world, BlockPos pos, BlockState state, VaultConfig config, VaultServerData serverData, VaultSharedData sharedData, CallbackInfo ci) {
-        // Nur jede Sekunde (20 Ticks) prüfen
+        // Nur jede Sekunde prüfen
         if (world.getTime() % 20 != 0) return;
 
         if (serverData instanceof IVaultCooldown cooldownData) {
-            long now = world.getTime();
-
-            // Wir brauchen Zugriff auf die Sets
             Set<UUID> rewardedPlayers = ((VaultServerDataAccessor) serverData).getRewardedPlayersSet();
+
+            // OPTIMIERUNG: Wenn niemand belohnt wurde, gar nichts tun (spart Objekterstellung)
+            if (rewardedPlayers.isEmpty()) return;
+
+            long now = world.getTime();
             Set<UUID> connectedPlayers = ((VaultSharedDataAccessor) sharedData).getConnectedPlayersSet();
 
-            // Kopie erstellen, um ConcurrentModificationException zu vermeiden (da wir im Loop löschen wollen)
+            // Kopie erstellen für Iteration
             Set<UUID> playersToCheck = new HashSet<>(rewardedPlayers);
             boolean changed = false;
 
             for (UUID uuid : playersToCheck) {
-                // Hat der Spieler seinen Cooldown abgesessen?
-                // Hinweis: hasLootedRecently liefert 'false' zurück, wenn der Cooldown VORBEI ist.
+                // hasLootedRecently gibt 'false' zurück, wenn der Cooldown VORBEI ist
                 if (!cooldownData.hasLootedRecently(uuid, now)) {
 
-                    // JA! Cooldown vorbei. Spieler entfernen.
+                    // 1. Aus Vanilla-Listen entfernen
                     rewardedPlayers.remove(uuid);
                     connectedPlayers.remove(uuid);
-                    Simplequalityoflife.LOGGER.info("Vault Tick: Cooldown abgelaufen für " + uuid);
+
+                    // 2. WICHTIG: Auch aus unserer Datenbank entfernen (Speicherleck-Fix)
+                    cooldownData.removeLootData(uuid);
+
                     changed = true;
                 }
             }
 
-            // Wenn wir jemanden gelöscht haben, müssen wir speichern und syncen
             if (changed) {
                 ((VaultServerDataAccessor) serverData).setDirty(true);
                 ((VaultSharedDataAccessor) sharedData).setDirty(true);
-
-                // FIX: Statischen markDirty Aufruf nutzen!
-                // Da markDirty protected sein könnte, nutzen wir world.markDirty oder einen Accessor/Invoker falls nötig.
-                // Aber VaultBlockEntity.markDirty(world, pos, state) ist oft protected.
-                // Einfacher: world.markDirty(pos) reicht meistens!
                 world.markDirty(pos);
-
-                // Status Update an alle senden
                 world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
             }
         }

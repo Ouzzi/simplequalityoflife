@@ -7,7 +7,9 @@ public interface IVaultCooldown {
     boolean hasLootedRecently(UUID playerUuid, long worldTime);
     void markLooted(UUID playerUuid, long worldTime);
 
-    // NEU: Getter und Setter für die Speicherung
+    // NEU: Methode zum Entfernen von Daten
+    void removeLootData(UUID playerUuid);
+
     Map<UUID, Long> getLootTimesMap();
     void setLootTimesMap(Map<UUID, Long> map);
 }

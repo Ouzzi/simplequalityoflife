@@ -26,10 +26,12 @@ public abstract class PassiveEntityMixin extends LivingEntity {
 
     @Inject(method = "tickMovement", at = @At("HEAD"))
     private void onTickMovement(CallbackInfo ci) {
+        if (this.getEntityWorld().isClient()) return;
+
+        if (this.age % 100 != 0) return;
         // Wir prüfen nur, wenn das Entity ein Kind ist (Alter < 0)
         // und einen Custom Name hat.
-        if (!this.getEntityWorld().isClient() && this.getBreedingAge() < 0 && this.hasCustomName()) {
-
+        if (this.getBreedingAge() < 0 && this.hasCustomName()) {
             Text customName = this.getCustomName();
             if (customName == null) return;
 

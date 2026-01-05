@@ -19,58 +19,40 @@ public class VaultServerDataMixin implements IVaultCooldown {
     @Override
     public boolean hasLootedRecently(UUID playerUuid, long worldTime) {
         if (!lastLootTimes.containsKey(playerUuid)) {
-            Simplequalityoflife.LOGGER.info("Vault Check: Spieler " + playerUuid + " war noch nie hier. Erlaubt.");
             return false;
         }
 
         long lastLoot = lastLootTimes.get(playerUuid);
         long diff = worldTime - lastLoot;
 
-        // Config laden mit Fallback
-        long configDays = 50; // Standard 100 Tage
+        // Config sicher abrufen
+        long configDays = 100;
         try {
             if (Simplequalityoflife.getConfig() != null) {
                 configDays = Simplequalityoflife.getConfig().qOL.vaultCooldownDays;
-                Simplequalityoflife.LOGGER.info("Geladener Vault Cooldown aus Config: " + configDays + " Tage");
             }
         } catch (Exception e) {
-            Simplequalityoflife.LOGGER.error("Fehler beim Laden der Vault Config, nutze Standard 100 Tage", e);
+            // Fallback
         }
 
         long cooldownTicks = configDays * 24000L;
 
-        // Debug Ausgabe in die Konsole
-        Simplequalityoflife.LOGGER.info("Vault Check für " + playerUuid + ":");
-        Simplequalityoflife.LOGGER.info(" - Letzter Loot: " + lastLoot);
-        Simplequalityoflife.LOGGER.info(" - Jetzige Zeit: " + worldTime);
-        Simplequalityoflife.LOGGER.info(" - Differenz: " + diff + " Ticks");
-        Simplequalityoflife.LOGGER.info(" - Cooldown Zeit: " + cooldownTicks + " Ticks (" + configDays + " Tage)");
+        // Sicherheitshalber: Wenn diff negativ (Zeitumstellung), erlauben wir es nicht sofort,
+        // sondern behandeln es wie "noch im Cooldown", außer es ist extrem.
+        if (diff < 0) return true;
 
-        // Wenn Zeit zurückgedreht wurde (diff negativ), erlauben wir es sicherheitshalber
-        if (diff < 0) return false;
-
-        boolean isOnCooldown = diff < cooldownTicks;
-        Simplequalityoflife.LOGGER.info(" - Noch im Cooldown? " + isOnCooldown);
-
-        return isOnCooldown;
+        return diff < cooldownTicks;
     }
-
-    /*
-
-    @Override
-    public boolean hasLootedRecently(UUID playerUuid, long worldTime) {
-        if (!lastLootTimes.containsKey(playerUuid)) return false;
-        long lastLoot = lastLootTimes.get(playerUuid);
-
-        // TEST: Nur 10 Sekunden Cooldown (200 Ticks)
-        return (worldTime - lastLoot) < 200L;
-    }
-     */
 
     @Override
     public void markLooted(UUID playerUuid, long worldTime) {
         lastLootTimes.put(playerUuid, worldTime);
-        Simplequalityoflife.LOGGER.info("Vault: Spieler " + playerUuid + " hat gelootet bei Zeit " + worldTime);
+    }
+
+    // NEU: Implementierung der Lösch-Methode
+    @Override
+    public void removeLootData(UUID playerUuid) {
+        lastLootTimes.remove(playerUuid);
     }
 
     @Override
