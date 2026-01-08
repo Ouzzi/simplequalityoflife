@@ -62,10 +62,24 @@ public class SimplequalityoflifeConfig implements ConfigData {
         public boolean enableFullDurabilityBonus = true;
 
         @ConfigEntry.Gui.Tooltip
-        public double fullDurabilityThreshold = 0.90; // Ab 90% Haltbarkeit
+        public double fullDurabilityThreshold = 0.80;
 
         @ConfigEntry.Gui.Tooltip
-        public double fullDurabilityBonusMultiplier = 1.5; // 50% Bonus (Efficiency & Damage)
+        public double fullDurabilityBonusMultiplier = 1.5;
+
+        // --- NEUE FEATURES (Piglins) ---
+
+        @ConfigEntry.Gui.Tooltip
+        public boolean piglinsIgnoreGoldTrims = true;
+
+        @ConfigEntry.Gui.Tooltip
+        public boolean piglinsIgnoreGoldTools = true;
+
+        @ConfigEntry.Gui.Tooltip // Zeigt Info an, dass es 0-100 sein soll
+        public int rainProbability = 100;
+
+        @ConfigEntry.Gui.Tooltip
+        public int clientRainParticleDensity = 20;
 
     }
 }

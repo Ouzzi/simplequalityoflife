@@ -11,8 +11,10 @@
     "LadderSpeedMixin",
     "LivingEntityJumpMixin",
     "PassiveEntityMixin",
+    "PiglinGoldMixin",
     "PlayerEntityCrawlMixin",
     "PowderSnowWalkMixin",
+    "ServerWeatherMixin",
     "SharpnessGrassCutMixin",
     "VaultBlockEntityMixin",
     "VaultBlockEntityServerMixin",
@@ -25,5 +27,9 @@
   },
   "overwrites": {
     "requireAnnotations": true
-	}
+  },
+  "client": [
+    "client.ClientWeatherMixin",
+    "client.VisualRainMixin"
+  ]
 }
