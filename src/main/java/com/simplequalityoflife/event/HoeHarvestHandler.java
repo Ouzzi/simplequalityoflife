@@ -6,6 +6,7 @@ import net.minecraft.block.*;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HoeItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.context.LootContextParameters;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class HoeHarvestHandler {
@@ -29,20 +31,17 @@ public class HoeHarvestHandler {
     }
 
     private static ActionResult onRightClickBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
-        // 1. Basic Checks
         if (!Simplequalityoflife.getConfig().qOL.enableHoeHarvest) return ActionResult.PASS;
         if (world.isClient()) return ActionResult.PASS;
         if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
 
         ItemStack stack = player.getMainHandStack();
-        // 2. Muss eine Hacke sein
         if (!(stack.getItem() instanceof HoeItem)) return ActionResult.PASS;
 
         BlockPos pos = hitResult.getBlockPos();
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
 
-        // 3. Ist es eine erntefähige Pflanze?
         if (isMatureCrop(state, block)) {
             return harvest(player, (ServerWorld) world, pos, state, stack);
         }
@@ -70,33 +69,33 @@ public class HoeHarvestHandler {
                 .add(LootContextParameters.BLOCK_STATE, state);
 
         List<ItemStack> drops = state.getDroppedStacks(builder);
+        Item seedItem = getSeedItem(state.getBlock());
 
-        // Suche nach dem Samen-Item zum "Bezahlen" des Replants
-        ItemStack seedItem = getSeedForBlock(state.getBlock());
         boolean paidSeed = false;
 
-        // Wir entfernen 1 Samen aus den Drops für das Replanting
-        for (ItemStack drop : drops) {
-            if (drop.getItem() == seedItem.getItem()) {
+        Iterator<ItemStack> iterator = drops.iterator();
+        while (iterator.hasNext()) {
+            ItemStack drop = iterator.next();
+
+            if (drop.getItem() == seedItem) {
                 drop.decrement(1);
                 paidSeed = true;
+
+                if (drop.isEmpty()) {
+                    iterator.remove();
+                }
                 break;
             }
         }
 
-        // Falls kein Samen gedroppt wurde, brechen wir ab (außer Creative)
         if (!paidSeed && !player.isCreative()) {
             return ActionResult.PASS;
         }
 
-        // Drops spawnen
         for (ItemStack drop : drops) {
-            if (!drop.isEmpty()) {
-                Block.dropStack(world, pos, drop);
-            }
+            Block.dropStack(world, pos, drop);
         }
 
-        // Pflanze zurücksetzen
         BlockState newState = state;
         if (state.getBlock() instanceof CropBlock crop) {
             newState = crop.withAge(0);
@@ -108,27 +107,24 @@ public class HoeHarvestHandler {
 
         world.setBlockState(pos, newState);
 
-        // Sound abspielen
         world.playSound(null, pos, SoundEvents.BLOCK_CROP_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
-        // Haltbarkeit abziehen (1 Schaden)
         if (!player.isCreative()) {
             tool.damage(1, player, EquipmentSlot.MAINHAND);
         }
 
-        // Arm-Animation
         player.swingHand(Hand.MAIN_HAND, true);
 
         return ActionResult.SUCCESS;
     }
 
-    private static ItemStack getSeedForBlock(Block block) {
-        if (block == Blocks.WHEAT) return new ItemStack(Items.WHEAT_SEEDS);
-        if (block == Blocks.POTATOES) return new ItemStack(Items.POTATO);
-        if (block == Blocks.CARROTS) return new ItemStack(Items.CARROT);
-        if (block == Blocks.BEETROOTS) return new ItemStack(Items.BEETROOT_SEEDS);
-        if (block == Blocks.NETHER_WART) return new ItemStack(Items.NETHER_WART);
-        if (block == Blocks.COCOA) return new ItemStack(Items.COCOA_BEANS);
-        return ItemStack.EMPTY;
+    private static Item getSeedItem(Block block) {
+        if (block == Blocks.WHEAT) return Items.WHEAT_SEEDS;
+        if (block == Blocks.POTATOES) return Items.POTATO;
+        if (block == Blocks.CARROTS) return Items.CARROT;
+        if (block == Blocks.BEETROOTS) return Items.BEETROOT_SEEDS;
+        if (block == Blocks.NETHER_WART) return Items.NETHER_WART;
+        if (block == Blocks.COCOA) return Items.COCOA_BEANS;
+        return Items.AIR;
     }
 }
