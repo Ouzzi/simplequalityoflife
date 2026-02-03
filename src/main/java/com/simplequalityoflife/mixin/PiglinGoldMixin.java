@@ -1,6 +1,7 @@
 package com.simplequalityoflife.mixin;
 
 import com.simplequalityoflife.Simplequalityoflife;
+import com.simplequalityoflife.config.SimplequalityoflifeConfig;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -24,9 +25,8 @@ public class PiglinGoldMixin {
     private static void onIsWearingPiglinSafeArmor(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
         if (!(entity instanceof PlayerEntity player)) return;
 
-        var config = Simplequalityoflife.getConfig().qOL;
+        SimplequalityoflifeConfig.QOL config = Simplequalityoflife.getConfig().qOL;
 
-        // 1. Gold Trims
         if (config.piglinsIgnoreGoldTrims) {
             for (EquipmentSlot slot : EquipmentSlot.values()) {
                 if (slot.getType() != EquipmentSlot.Type.HUMANOID_ARMOR) continue;
@@ -41,8 +41,6 @@ public class PiglinGoldMixin {
                 }
             }
         }
-
-        // 2. Gold Werkzeuge
         if (config.piglinsIgnoreGoldTools) {
             if (isGoldTool(player.getMainHandStack()) || isGoldTool(player.getOffHandStack())) {
                 cir.setReturnValue(true);
@@ -54,7 +52,6 @@ public class PiglinGoldMixin {
     private static boolean isGoldTool(ItemStack stack) {
         if (stack.isEmpty()) return false;
         Item item = stack.getItem();
-        // Direkter Vergleich mit bekannten Gold-Items statt ToolMaterial Import
         return item == Items.GOLDEN_SWORD ||
                 item == Items.GOLDEN_SPEAR ||
                 item == Items.GOLDEN_PICKAXE ||
