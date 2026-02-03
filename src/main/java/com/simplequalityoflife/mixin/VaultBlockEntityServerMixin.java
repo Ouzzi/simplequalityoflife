@@ -27,40 +27,32 @@ public class VaultBlockEntityServerMixin {
     // --- TICK LOGIK ---
     @Inject(method = "tick", at = @At("HEAD"))
     private static void tickCooldowns(ServerWorld world, BlockPos pos, BlockState state, VaultConfig config, VaultServerData serverData, VaultSharedData sharedData, CallbackInfo ci) {
-        // Nur jede Sekunde prüfen
-        if (world.getTime() % 20 != 0) return;
+
+        if (world.getTime() % 40 != 0) return;
 
         if (serverData instanceof IVaultCooldown cooldownData) {
             Set<UUID> rewardedPlayers = ((VaultServerDataAccessor) serverData).getRewardedPlayersSet();
 
-            // OPTIMIERUNG: Wenn niemand belohnt wurde, gar nichts tun (spart Objekterstellung)
             if (rewardedPlayers.isEmpty()) return;
 
             long now = world.getTime();
             Set<UUID> connectedPlayers = ((VaultSharedDataAccessor) sharedData).getConnectedPlayersSet();
 
-            // Kopie erstellen für Iteration
             Set<UUID> playersToCheck = new HashSet<>(rewardedPlayers);
             boolean changed = false;
 
             for (UUID uuid : playersToCheck) {
-                // hasLootedRecently gibt 'false' zurück, wenn der Cooldown VORBEI ist
                 if (!cooldownData.hasLootedRecently(uuid, now)) {
-
-                    // 1. Aus Vanilla-Listen entfernen
                     rewardedPlayers.remove(uuid);
                     connectedPlayers.remove(uuid);
-
-                    // 2. WICHTIG: Auch aus unserer Datenbank entfernen (Speicherleck-Fix)
                     cooldownData.removeLootData(uuid);
-
                     changed = true;
                 }
             }
 
             if (changed) {
                 ((VaultServerDataAccessor) serverData).setDirty(true);
-                ((VaultSharedDataAccessor) sharedData).setDirty(true);
+
                 world.markDirty(pos);
                 world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
             }

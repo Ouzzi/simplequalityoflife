@@ -25,49 +25,48 @@ public class GrassOutlineMixin {
 
     @Inject(method = "getOutlineShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At("HEAD"), cancellable = true)
     private void removeOutlineForSharpness(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        // Prüfen, ob der Kontext ein Spieler ist
-        if (context instanceof EntityShapeContext entityContext && entityContext.getEntity() instanceof PlayerEntity player) {
+        if (!Simplequalityoflife.getConfig().qOL.sharpnessCutsGrass) return;
 
-            if (!Simplequalityoflife.getConfig().qOL.sharpnessCutsGrass) return;
+        if (!(context instanceof EntityShapeContext entityContext) || !(entityContext.getEntity() instanceof PlayerEntity player)) {
+            return;
+        }
 
-            ItemStack mainHand = player.getMainHandStack();
-            boolean isWeapon = mainHand.isIn(ItemTags.SWORDS) || mainHand.isIn(ItemTags.AXES);
+        if (player.isSneaking()) {
+            return;
+        }
 
-            if (isWeapon) {
-                // Registry Zugriff sicherstellen (kann client-seitig manchmal null sein, daher vorsichtig)
-                if (player.getEntityWorld() == null) return;
+        ItemStack mainHand = player.getMainHandStack();
+        if (mainHand.isEmpty()) return;
 
-                var registryManager = player.getEntityWorld().getRegistryManager();
-                if (registryManager == null) return;
+        if (!(mainHand.isIn(ItemTags.SWORDS) || mainHand.isIn(ItemTags.AXES))) {
+            return;
+        }
 
-                var registry = registryManager.getOptional(RegistryKeys.ENCHANTMENT);
-                if (registry.isPresent()) {
-                    var sharpness = registry.get().getOptional(Enchantments.SHARPNESS);
+        if (player.getEntityWorld() == null) return;
 
-                    if (sharpness.isPresent()) {
-                        int level = EnchantmentHelper.getLevel(sharpness.get(), mainHand);
+        var registryManager = player.getEntityWorld().getRegistryManager();
+        var enchantmentRegistry = registryManager.getOptional(RegistryKeys.ENCHANTMENT);
 
-                        if (level >= 3) {
-                            // Zugriff auf den aktuellen BlockState (da wir im Mixin von AbstractBlockState sind)
-                            BlockState state = (BlockState) (Object) this;
+        if (enchantmentRegistry.isPresent()) {
+            var sharpnessEntry = enchantmentRegistry.get().getOptional(Enchantments.SHARPNESS);
 
-                            boolean isVegetation = state.isIn(BlockTags.FLOWERS)
-                                    || state.getBlock() == Blocks.SHORT_GRASS
-                                    || state.getBlock() == Blocks.TALL_GRASS
-                                    || state.getBlock() == Blocks.FERN
-                                    || state.getBlock() == Blocks.LARGE_FERN
-                                    || state.getBlock() == Blocks.DEAD_BUSH
-                                    || state.getBlock() == Blocks.PINK_PETALS
-                                    || state.getBlock() == Blocks.NETHER_SPROUTS
-                                    || state.getBlock() == Blocks.CRIMSON_ROOTS
-                                    || state.getBlock() == Blocks.WARPED_ROOTS
-                                    || state.isIn(BlockTags.REPLACEABLE);
+            if (sharpnessEntry.isPresent()) {
+                int level = EnchantmentHelper.getLevel(sharpnessEntry.get(), mainHand);
 
-                            if (isVegetation) {
-                                // Gibt eine leere Form zurück -> Man schlägt durch den Block hindurch!
-                                cir.setReturnValue(VoxelShapes.empty());
-                            }
-                        }
+                if (level >= 3) {
+                    BlockState state = (BlockState) (Object) this;
+
+                    boolean isVegetation = state.isIn(BlockTags.FLOWERS)
+                            || state.getBlock() == Blocks.SHORT_GRASS
+                            || state.getBlock() == Blocks.TALL_GRASS
+                            || state.getBlock() == Blocks.FERN
+                            || state.getBlock() == Blocks.LARGE_FERN
+                            || state.getBlock() == Blocks.DEAD_BUSH
+                            || state.getBlock() == Blocks.PINK_PETALS
+                            || state.isIn(BlockTags.REPLACEABLE);
+
+                    if (isVegetation) {
+                        cir.setReturnValue(VoxelShapes.empty());
                     }
                 }
             }
