@@ -27,5 +27,10 @@ public class Simplequalityoflife implements ModInitializer {
         HoeHarvestHandler.register();
 	}
 
-    public static SimplequalityoflifeConfig getConfig() { return CONFIG; }
+    public static SimplequalityoflifeConfig getConfig() {
+        if (CONFIG == null) {
+            return new SimplequalityoflifeConfig();
+        }
+        return CONFIG;
+    }
 }
