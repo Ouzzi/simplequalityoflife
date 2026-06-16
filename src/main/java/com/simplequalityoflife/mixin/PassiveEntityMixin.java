@@ -29,27 +29,26 @@ public abstract class PassiveEntityMixin extends LivingEntity {
         if (this.getEntityWorld().isClient()) return;
 
         if (this.age % 100 != 0) return;
-        // Wir prüfen nur, wenn das Entity ein Kind ist (Alter < 0)
-        // und einen Custom Name hat.
-        if (this.getBreedingAge() < 0 && this.hasCustomName()) {
-            Text customName = this.getCustomName();
-            if (customName == null) return;
+        if (!this.hasCustomName()) return;
 
-            String name = customName.getString();
-            List<String> suffixes = Simplequalityoflife.getConfig().qOL.nametagBabySuffixes;
+        Text customName = this.getCustomName();
+        if (customName == null) return;
 
-            // Prüfen, ob der Name mit einem der Suffixe endet
-            for (String suffix : suffixes) {
-                if (name.endsWith(suffix)) {
-                    // Alter auf -24000 (Standard Baby-Startwert) zurücksetzen
-                    // oder einfach verhindern, dass es hochzählt.
-                    // Da tickMovement() das Alter hochzählt, setzen wir es hier fest.
-                    // -24000 ist sicher, damit es klein bleibt.
-                    if (this.getBreedingAge() > -24000) {
-                        this.setBreedingAge(-24000);
-                    }
-                    return;
+        String name = customName.getString();
+        List<String> suffixes = Simplequalityoflife.getConfig().qOL.nametagBabySuffixes;
+
+        // Prüfen, ob der Name mit einem der Suffixe endet
+        for (String suffix : suffixes) {
+            // null/leer überspringen: name.endsWith(null) wirft NPE, endsWith("") wäre immer true
+            if (suffix == null || suffix.isEmpty()) continue;
+            if (name.endsWith(suffix)) {
+                // Auf Baby-Alter (-24000) halten. WICHTIG: NICHT auf "ist gerade ein Baby" beschränken –
+                // sonst kann ein Tier, das zwischen zwei Checks (alle 100 Ticks) erwachsen wird, dauerhaft
+                // entkommen. So wird es notfalls wieder auf Baby zurückgesetzt.
+                if (this.getBreedingAge() > -24000) {
+                    this.setBreedingAge(-24000);
                 }
+                return;
             }
         }
     }

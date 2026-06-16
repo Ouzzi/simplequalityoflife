@@ -34,7 +34,12 @@ public class AutoWalkHandler {
 
             // Config Check
             if (!Simplequalityoflife.getConfig().qOL.enableAutowalk) {
-                autoWalkEnabled = false;
+                // FIX: Wenn das Feature deaktiviert wird, während AutoWalk gerade läuft,
+                // muss die Vorwärts-Taste explizit losgelassen werden – sonst "klebt" sie fest.
+                if (autoWalkEnabled) {
+                    autoWalkEnabled = false;
+                    client.options.forwardKey.setPressed(false);
+                }
                 return;
             }
 

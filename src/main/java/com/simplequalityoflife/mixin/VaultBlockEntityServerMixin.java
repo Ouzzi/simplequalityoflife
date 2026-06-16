@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,6 +24,11 @@ import java.util.UUID;
 
 @Mixin(VaultBlockEntity.Server.class)
 public class VaultBlockEntityServerMixin {
+
+    // Hält fest, ob der Spieler beim Eintritt in die Vanilla-tryUnlock-Logik bereits belohnt war.
+    // tryUnlock läuft serverseitig und synchron (HEAD vor TAIL), daher ist ein statisches Feld sicher.
+    @Unique
+    private static boolean simplequalityoflife$wasRewardedBeforeUnlock;
 
     // --- TICK LOGIK ---
     @Inject(method = "tick", at = @At("HEAD"))
@@ -52,6 +58,8 @@ public class VaultBlockEntityServerMixin {
 
             if (changed) {
                 ((VaultServerDataAccessor) serverData).setDirty(true);
+                // connectedPlayers (sharedData) wurde mutiert -> Client muss neu synchronisiert werden.
+                ((VaultSharedDataAccessor) sharedData).setDirty(true);
 
                 world.markDirty(pos);
                 world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
@@ -64,6 +72,7 @@ public class VaultBlockEntityServerMixin {
     private static void checkCooldownClick(ServerWorld world, BlockPos pos, BlockState state, VaultConfig config, VaultServerData serverData, VaultSharedData sharedData, PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         // Diese Methode fängt Fälle ab, wo der Tick vielleicht noch nicht lief,
         // der Spieler aber schon klickt.
+        simplequalityoflife$wasRewardedBeforeUnlock = false;
         if (serverData instanceof IVaultCooldown cooldownData) {
             UUID uuid = player.getUuid();
             Set<UUID> rewardedPlayers = ((VaultServerDataAccessor) serverData).getRewardedPlayersSet();
@@ -78,8 +87,11 @@ public class VaultBlockEntityServerMixin {
                 ((VaultSharedDataAccessor) sharedData).setDirty(true);
                 world.updateListeners(pos, state, state, 3);
 
-                Simplequalityoflife.LOGGER.info("Vault Klick-Reset für " + player.getName().getString());
+                Simplequalityoflife.LOGGER.debug("Vault Klick-Reset für {}", player.getName().getString());
             }
+
+            // Zustand festhalten, mit dem die Vanilla-Logik startet (nach einem evtl. Reset oben).
+            simplequalityoflife$wasRewardedBeforeUnlock = rewardedPlayers.contains(uuid);
         }
     }
 
@@ -87,14 +99,14 @@ public class VaultBlockEntityServerMixin {
     private static void saveCooldown(ServerWorld world, BlockPos pos, BlockState state, VaultConfig config, VaultServerData serverData, VaultSharedData sharedData, PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         Set<UUID> rewardedPlayers = ((VaultServerDataAccessor) serverData).getRewardedPlayersSet();
 
-        // Wenn Loot erfolgreich war -> Zeit speichern
-        if (rewardedPlayers.contains(player.getUuid())) {
+        // Nur stempeln, wenn dieser Klick FRISCHEN Loot gewährt hat (vorher nicht belohnt, jetzt schon).
+        // Verhindert, dass wiederholtes Anklicken eines bereits geplünderten Vaults die Abklingzeit zurücksetzt.
+        if (!simplequalityoflife$wasRewardedBeforeUnlock && rewardedPlayers.contains(player.getUuid())) {
             if (serverData instanceof IVaultCooldown cooldownData) {
                 cooldownData.markLooted(player.getUuid(), world.getTime());
                 ((VaultServerDataAccessor) serverData).setDirty(true);
 
-                // Debug
-                Simplequalityoflife.LOGGER.info("Vault: Zeit gespeichert für " + player.getName().getString());
+                Simplequalityoflife.LOGGER.debug("Vault: Zeit gespeichert für {}", player.getName().getString());
             }
         }
     }

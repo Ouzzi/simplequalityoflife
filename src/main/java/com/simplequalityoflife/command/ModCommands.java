@@ -1,6 +1,7 @@
 package com.simplequalityoflife.command;
 
 import com.mojang.brigadier.arguments.*;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.simplequalityoflife.Simplequalityoflife;
 import com.simplequalityoflife.config.SimplequalityoflifeConfig;
 import com.simplequalityoflife.util.CrawlAccessor;
@@ -8,14 +9,14 @@ import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.vehicle.*;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public class ModCommands {
 
@@ -33,12 +34,13 @@ public class ModCommands {
                         return 1;
                     }));
 
-
             // --- CONFIG COMMANDS (simplequalityoflife) ---
             dispatcher.register(CommandManager.literal("simplequalityoflife")
-                    // Level 4 für Admin-Befehle (Config Änderungen)
-                    .requires(source -> checkPermission(source, 4))
-                    // 2. Vaults
+                    // Level 4 (OWNERS) für Admin-Befehle (Config Änderungen).
+                    // Die 1.21.11-Permission-API nutzt PermissionChecks statt int-Level.
+                    .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+
+                    // --- Vaults ---
                     .then(CommandManager.literal("vaults")
                             .then(CommandManager.literal("cooldown")
                                     .then(CommandManager.argument("days", IntegerArgumentType.integer(0))
@@ -48,41 +50,17 @@ public class ModCommands {
                                                 saveConfig();
                                                 ctx.getSource().sendFeedback(() -> Text.literal("Vault Cooldown set to: " + val + " days"), true);
                                                 return 1;
-                                            })))
-                    )
+                                            }))))
 
-                    // 8. Tweaks (Alle Features)
+                    // --- Tweaks (Alle Features) ---
                     .then(CommandManager.literal("tweaks")
-                            .then(CommandManager.literal("fullDurabilityBonus")
-                                    .then(CommandManager.argument("enabled", BoolArgumentType.bool())
-                                            .executes(ctx -> {
-                                                boolean val = BoolArgumentType.getBool(ctx, "enabled");
-                                                Simplequalityoflife.getConfig().qOL.enableFullDurabilityBonus = val;
-                                                saveConfig();
-                                                ctx.getSource().sendFeedback(() -> Text.literal("Full Durability Bonus enabled: " + val), true);
-                                                return 1;
-                                            })))
-                            // AutoWalk
-                            .then(CommandManager.literal("autowalk")
-                                    .then(CommandManager.argument("enabled", BoolArgumentType.bool())
-                                            .executes(ctx -> {
-                                                boolean val = BoolArgumentType.getBool(ctx, "enabled");
-                                                Simplequalityoflife.getConfig().qOL.enableAutowalk = val;
-                                                saveConfig();
-                                                ctx.getSource().sendFeedback(() -> Text.literal("Auto-Walk enabled: " + val), true);
-                                                return 1;
-                                            })))
-                            // Farmland Protect
-                            .then(CommandManager.literal("farmlandProtect")
-                                    .then(CommandManager.argument("enabled", BoolArgumentType.bool())
-                                            .executes(ctx -> {
-                                                boolean val = BoolArgumentType.getBool(ctx, "enabled");
-                                                Simplequalityoflife.getConfig().qOL.preventFarmlandTrampleWithFeatherFalling = val;
-                                                saveConfig();
-                                                ctx.getSource().sendFeedback(() -> Text.literal("Farmland Feather Falling Protection: " + val), true);
-                                                return 1;
-                                            })))
-                            // Ladder Speed
+                            .then(boolTweak("fullDurabilityBonus", (c, v) -> { c.qOL.enableFullDurabilityBonus = v; }, "Full Durability Bonus enabled"))
+                            .then(boolTweak("autowalk", (c, v) -> { c.qOL.enableAutowalk = v; }, "Auto-Walk enabled"))
+                            .then(boolTweak("farmlandProtect", (c, v) -> { c.qOL.preventFarmlandTrampleWithFeatherFalling = v; }, "Farmland Feather Falling Protection"))
+                            .then(boolTweak("frostWalkerSnow", (c, v) -> { c.frostWalkerWalkOnPowderSnow = v; }, "Frost Walker on Powder Snow"))
+                            .then(boolTweak("hoeHarvest", (c, v) -> { c.qOL.enableHoeHarvest = v; }, "Hoe Harvest & Replant"))
+                            .then(boolTweak("furnaceLava", (c, v) -> { c.qOL.enableFurnaceLavaFill = v; }, "Furnace Lava Fill"))
+                            .then(boolTweak("sharpnessCut", (c, v) -> { c.qOL.sharpnessCutsGrass = v; }, "Sharpness Cuts Grass"))
                             .then(CommandManager.literal("ladderSpeed")
                                     .then(CommandManager.argument("speed", DoubleArgumentType.doubleArg(0.0))
                                             .executes(ctx -> {
@@ -92,122 +70,81 @@ public class ModCommands {
                                                 ctx.getSource().sendFeedback(() -> Text.literal("Ladder Climbing Speed set to: " + val), true);
                                                 return 1;
                                             })))
-                            // Sharpness Cut
-                            .then(CommandManager.literal("sharpnessCut")
-                                    .then(CommandManager.argument("enabled", BoolArgumentType.bool())
-                                            .executes(ctx -> {
-                                                boolean val = BoolArgumentType.getBool(ctx, "enabled");
-                                                Simplequalityoflife.getConfig().qOL.sharpnessCutsGrass = val;
-                                                saveConfig();
-                                                ctx.getSource().sendFeedback(() -> Text.literal("Sharpness Cuts Grass: " + val), true);
-                                                return 1;
-                                            })))
-                            // Mute Suffixes
-                            .then(CommandManager.literal("muteSuffixes")
-                                    .then(CommandManager.literal("list")
-                                            .executes(ctx -> {
-                                                List<String> list = Simplequalityoflife.getConfig().qOL.nametagMuteSuffixes;
-                                                ctx.getSource().sendFeedback(() -> Text.literal("Mute Suffixes: " + list.toString()).formatted(Formatting.YELLOW), false);
-                                                return list.size();
-                                            }))
-                                    .then(CommandManager.literal("add")
-                                            .then(CommandManager.argument("suffix", StringArgumentType.string())
-                                                    .executes(ctx -> {
-                                                        String suffix = StringArgumentType.getString(ctx, "suffix");
-                                                        List<String> list = Simplequalityoflife.getConfig().qOL.nametagMuteSuffixes;
-                                                        if (!list.contains(suffix)) {
-                                                            list.add(suffix);
-                                                            saveConfig();
-                                                            ctx.getSource().sendFeedback(() -> Text.literal("Added suffix: " + suffix).formatted(Formatting.GREEN), true);
-                                                        } else {
-                                                            ctx.getSource().sendError(Text.literal("Suffix already exists."));
-                                                        }
-                                                        return 1;
-                                                    })))
-                                    .then(CommandManager.literal("remove")
-                                            .then(CommandManager.argument("suffix", StringArgumentType.string())
-                                                    .suggests((context, builder) -> CommandSource.suggestMatching(Simplequalityoflife.getConfig().qOL.nametagMuteSuffixes, builder))
-                                                    .executes(ctx -> {
-                                                        String suffix = StringArgumentType.getString(ctx, "suffix");
-                                                        List<String> list = Simplequalityoflife.getConfig().qOL.nametagMuteSuffixes;
-                                                        if (list.remove(suffix)) {
-                                                            saveConfig();
-                                                            ctx.getSource().sendFeedback(() -> Text.literal("Removed suffix: " + suffix).formatted(Formatting.GREEN), true);
-                                                        } else {
-                                                            ctx.getSource().sendError(Text.literal("Suffix not found."));
-                                                        }
-                                                        return 1;
-                                                    })))
-                                    .then(CommandManager.literal("clear")
-                                            .executes(ctx -> {
-                                                Simplequalityoflife.getConfig().qOL.nametagMuteSuffixes.clear();
-                                                saveConfig();
-                                                ctx.getSource().sendFeedback(() -> Text.literal("Cleared all mute suffixes.").formatted(Formatting.RED), true);
-                                                return 1;
-                                            }))
-                                    .then(CommandManager.literal("hoeHarvest")
-                                            .then(CommandManager.argument("enabled", BoolArgumentType.bool())
-                                                    .executes(ctx -> {
-                                                        boolean val = BoolArgumentType.getBool(ctx, "enabled");
-                                                        Simplequalityoflife.getConfig().qOL.enableHoeHarvest = val;
-                                                        saveConfig();
-                                                        ctx.getSource().sendFeedback(() -> Text.literal("Hoe Harvest & Replant: " + val), true);
-                                                        return 1;
-                                                    })))
-                            )
-                            .then(CommandManager.literal("babySuffixes")
-                                    .then(CommandManager.literal("list")
-                                            .executes(ctx -> {
-                                                List<String> list = Simplequalityoflife.getConfig().qOL.nametagBabySuffixes;
-                                                ctx.getSource().sendFeedback(() -> Text.literal("Baby Suffixes: " + list.toString()).formatted(Formatting.YELLOW), false);
-                                                return list.size();
-                                            }))
-                                    .then(CommandManager.literal("add")
-                                            .then(CommandManager.argument("suffix", StringArgumentType.string())
-                                                    .executes(ctx -> {
-                                                        String suffix = StringArgumentType.getString(ctx, "suffix");
-                                                        List<String> list = Simplequalityoflife.getConfig().qOL.nametagBabySuffixes;
-                                                        if (!list.contains(suffix)) {
-                                                            list.add(suffix);
-                                                            saveConfig();
-                                                            ctx.getSource().sendFeedback(() -> Text.literal("Added baby suffix: " + suffix).formatted(Formatting.GREEN), true);
-                                                        } else {
-                                                            ctx.getSource().sendError(Text.literal("Suffix already exists."));
-                                                        }
-                                                        return 1;
-                                                    })))
-                                    .then(CommandManager.literal("remove")
-                                            .then(CommandManager.literal("remove")
-                                                    .then(CommandManager.argument("suffix", StringArgumentType.string())
-                                                            .suggests((context, builder) -> CommandSource.suggestMatching(Simplequalityoflife.getConfig().qOL.nametagBabySuffixes, builder))
-                                                            .executes(ctx -> {
-                                                                String suffix = StringArgumentType.getString(ctx, "suffix");
-                                                                List<String> list = Simplequalityoflife.getConfig().qOL.nametagBabySuffixes;
-                                                                if (list.remove(suffix)) {
-                                                                    saveConfig();
-                                                                    ctx.getSource().sendFeedback(() -> Text.literal("Removed baby suffix: " + suffix).formatted(Formatting.GREEN), true);
-                                                                } else {
-                                                                    ctx.getSource().sendError(Text.literal("Suffix not found."));
-                                                                }
-                                                                return 1;
-                                                            })))
-                                    )
-                            )
-
+                            .then(suffixCommands("muteSuffixes",
+                                    () -> Simplequalityoflife.getConfig().qOL.nametagMuteSuffixes,
+                                    "mute suffix", "Mute Suffixes"))
+                            .then(suffixCommands("babySuffixes",
+                                    () -> Simplequalityoflife.getConfig().qOL.nametagBabySuffixes,
+                                    "baby suffix", "Baby Suffixes"))
                     )
-
             );
         });
     }
 
-    private static void saveConfig() {
-        AutoConfig.getConfigHolder(SimplequalityoflifeConfig.class).save();
+    // Baut einen einfachen An/Aus-Schalter für ein Boolean-Feature.
+    private static LiteralArgumentBuilder<ServerCommandSource> boolTweak(String name,
+                                                                        BiConsumer<SimplequalityoflifeConfig, Boolean> setter,
+                                                                        String label) {
+        return CommandManager.literal(name)
+                .then(CommandManager.argument("enabled", BoolArgumentType.bool())
+                        .executes(ctx -> {
+                            boolean val = BoolArgumentType.getBool(ctx, "enabled");
+                            setter.accept(Simplequalityoflife.getConfig(), val);
+                            saveConfig();
+                            ctx.getSource().sendFeedback(() -> Text.literal(label + ": " + val), true);
+                            return 1;
+                        }));
     }
 
-    private static boolean checkPermission(ServerCommandSource source, int level) {
-        if (source.getEntity() instanceof ServerPlayerEntity player) {
-            return source.getServer().getPlayerManager().isOperator(player.getPlayerConfigEntry());
-        }
-        return true;
+    // Baut den list/add/remove/clear-Unterbaum für eine Suffix-Liste.
+    private static LiteralArgumentBuilder<ServerCommandSource> suffixCommands(String name,
+                                                                             Supplier<List<String>> listSupplier,
+                                                                             String labelSingular,
+                                                                             String labelPlural) {
+        return CommandManager.literal(name)
+                .then(CommandManager.literal("list")
+                        .executes(ctx -> {
+                            List<String> list = listSupplier.get();
+                            ctx.getSource().sendFeedback(() -> Text.literal(labelPlural + ": " + list).formatted(Formatting.YELLOW), false);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("add")
+                        .then(CommandManager.argument("suffix", StringArgumentType.string())
+                                .executes(ctx -> {
+                                    String suffix = StringArgumentType.getString(ctx, "suffix");
+                                    List<String> list = listSupplier.get();
+                                    if (list.contains(suffix)) {
+                                        ctx.getSource().sendError(Text.literal("Suffix already exists."));
+                                        return 0;
+                                    }
+                                    list.add(suffix);
+                                    saveConfig();
+                                    ctx.getSource().sendFeedback(() -> Text.literal("Added " + labelSingular + ": " + suffix).formatted(Formatting.GREEN), true);
+                                    return 1;
+                                })))
+                .then(CommandManager.literal("remove")
+                        .then(CommandManager.argument("suffix", StringArgumentType.string())
+                                .suggests((context, builder) -> CommandSource.suggestMatching(listSupplier.get(), builder))
+                                .executes(ctx -> {
+                                    String suffix = StringArgumentType.getString(ctx, "suffix");
+                                    if (listSupplier.get().remove(suffix)) {
+                                        saveConfig();
+                                        ctx.getSource().sendFeedback(() -> Text.literal("Removed " + labelSingular + ": " + suffix).formatted(Formatting.GREEN), true);
+                                        return 1;
+                                    }
+                                    ctx.getSource().sendError(Text.literal("Suffix not found."));
+                                    return 0;
+                                })))
+                .then(CommandManager.literal("clear")
+                        .executes(ctx -> {
+                            listSupplier.get().clear();
+                            saveConfig();
+                            ctx.getSource().sendFeedback(() -> Text.literal("Cleared all " + labelPlural.toLowerCase() + ".").formatted(Formatting.RED), true);
+                            return 1;
+                        }));
+    }
+
+    private static void saveConfig() {
+        AutoConfig.getConfigHolder(SimplequalityoflifeConfig.class).save();
     }
 }

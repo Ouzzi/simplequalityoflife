@@ -11,14 +11,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class VisualRainMixin {
 
     /**
-     * Wir leiten den Abruf der Regen-Intensität (RainGradient) um.
-     * Das betrifft sowohl die visuelle Darstellung (Regensäulen) als auch die Anzahl der Partikel (Splashes).
+     * Skaliert die visuelle Regen-/Schneedarstellung in der Luft über den RainGradient.
+     * Hinweis: addParticlesAndSound ruft getRainGradient auf ClientWorld (nicht World) auf und würde von einem
+     * World-Redirect NICHT getroffen. Bodenpartikel/Sound werden daher stattdessen von ClientWeatherMixin reduziert.
      */
     @Redirect(
-        method = {
-            "buildPrecipitationPieces", // Zuständig für die Regen-Textur in der Luft
-            "addParticlesAndSound"      // Zuständig für Partikel am Boden und Sound
-        },
+        method = "buildPrecipitationPieces", // Zuständig für die Regen-Textur in der Luft
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/World;getRainGradient(F)F"

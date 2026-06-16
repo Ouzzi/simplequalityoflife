@@ -52,6 +52,9 @@ public class SimplequalityoflifeConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean enableHoeHarvest = true;
 
+        @ConfigEntry.Gui.Tooltip
+        public boolean enableFurnaceLavaFill = true;
+
         // --- Ladder Mechanics ---
         @ConfigEntry.Gui.Tooltip
         public double ladderClimbingSpeed = 0.4; // Vanilla default is ~0.2

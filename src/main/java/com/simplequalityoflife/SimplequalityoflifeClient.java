@@ -1,7 +1,7 @@
 package com.simplequalityoflife;
 
 import com.simplequalityoflife.client.AutoWalkHandler;
-import com.simplequalityoflife.event.HoeHarvestHandler;
+import com.simplequalityoflife.client.ClientNetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -17,8 +17,13 @@ public class SimplequalityoflifeClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // Empfängt die Server-Config und macht sie zur wirksamen Config auf entfernten Servern.
+        ClientNetworking.register();
+        Simplequalityoflife.setConfigOverride(ClientNetworking::getSyncedConfig);
+
         AutoWalkHandler.register();
-        HoeHarvestHandler.register();
+        // HoeHarvestHandler wird bereits im gemeinsamen Initializer (Simplequalityoflife) registriert.
+        // Eine zweite Registrierung hier würde den UseBlockCallback im Singleplayer doppelt anmelden.
 
         crawlKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.simplequalityoflife.crawl", // Translation Key

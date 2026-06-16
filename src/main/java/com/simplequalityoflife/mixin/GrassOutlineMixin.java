@@ -1,13 +1,13 @@
 package com.simplequalityoflife.mixin;
 
 import com.simplequalityoflife.Simplequalityoflife;
+import com.simplequalityoflife.util.VegetationUtil;
 import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -42,8 +42,6 @@ public class GrassOutlineMixin {
             return;
         }
 
-        if (player.getEntityWorld() == null) return;
-
         var registryManager = player.getEntityWorld().getRegistryManager();
         var enchantmentRegistry = registryManager.getOptional(RegistryKeys.ENCHANTMENT);
 
@@ -56,16 +54,7 @@ public class GrassOutlineMixin {
                 if (level >= 3) {
                     BlockState state = (BlockState) (Object) this;
 
-                    boolean isVegetation = state.isIn(BlockTags.FLOWERS)
-                            || state.getBlock() == Blocks.SHORT_GRASS
-                            || state.getBlock() == Blocks.TALL_GRASS
-                            || state.getBlock() == Blocks.FERN
-                            || state.getBlock() == Blocks.LARGE_FERN
-                            || state.getBlock() == Blocks.DEAD_BUSH
-                            || state.getBlock() == Blocks.PINK_PETALS
-                            || state.isIn(BlockTags.REPLACEABLE);
-
-                    if (isVegetation) {
+                    if (VegetationUtil.isCuttable(state)) {
                         cir.setReturnValue(VoxelShapes.empty());
                     }
                 }

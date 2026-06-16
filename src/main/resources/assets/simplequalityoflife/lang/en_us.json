@@ -6,83 +6,76 @@
   "block.simplequalityoflife.spawn_teleporter": "Spawn Teleporter",
   "block.simplequalityoflife.launchpad": "Launchpad",
 
-  "text.autoconfig.simplequalityoflife.title": "Simplefun Config",
+  "text.autoconfig.simplequalityoflife.title": "Simple Quality of Life",
   "text.autoconfig.simplequalityoflife.category.default": "General",
 
-  "text.autoconfig.simplequalityoflife.option.balancing": "Balancing",
-  "text.autoconfig.simplequalityoflife.option.balancing.rocketStackSize": "Rocket Stack Size",
-  "text.autoconfig.simplequalityoflife.option.balancing.rocketStackSize.@Tooltip[0]": "Default: 64.",
-  "text.autoconfig.simplequalityoflife.option.balancing.rocketStackSize.@Tooltip[1]": "Set to 16 to nerf elytra flight.",
-  "text.autoconfig.simplequalityoflife.option.balancing.vaultCooldownDays": "Vault Cooldown (Days)",
-  "text.autoconfig.simplequalityoflife.option.balancing.vaultCooldownDays.@Tooltip": "Time in Minecraft days until a player can loot a vault again.",
-
-  "text.autoconfig.simplequalityoflife.option.qOL.vaultCooldownDays": "Vault Cooldown (Days)",
-    "text.autoconfig.simplequalityoflife.option.qOL.vaultCooldownDays.@Tooltip": "Time in Minecraft days until a player can loot a vault again.",
-
-  "text.autoconfig.simplequalityoflife.option.commands": "Commands",
-  "text.autoconfig.simplequalityoflife.option.commands.enableKillBoatsCommand": "Enable /killboats",
-  "text.autoconfig.simplequalityoflife.option.commands.enableKillBoatsCommand.@Tooltip": "Enables a command to remove all empty boats nearby.",
-  "text.autoconfig.simplequalityoflife.option.commands.enableKillCartsCommand": "Enable /killcarts",
-  "text.autoconfig.simplequalityoflife.option.commands.enableKillCartsCommand.@Tooltip": "Enables a command to remove all empty minecarts nearby.",
+  "text.autoconfig.simplequalityoflife.option.frostWalkerWalkOnPowderSnow": "Frost Walker Walk on Powder Snow",
+  "text.autoconfig.simplequalityoflife.option.frostWalkerWalkOnPowderSnow.@Tooltip": "Allows players wearing Frost Walker boots to walk on powder snow without sinking.",
 
   "text.autoconfig.simplequalityoflife.option.qOL": "Quality of Life",
+
   "text.autoconfig.simplequalityoflife.option.qOL.enableAutowalk": "Enable Auto-Walk",
   "text.autoconfig.simplequalityoflife.option.qOL.enableAutowalk.@Tooltip": "Allows automatic walking via keybind.",
+
+  "text.autoconfig.simplequalityoflife.option.qOL.mutedEntities": "Muted Entity Types",
+  "text.autoconfig.simplequalityoflife.option.qOL.mutedEntities.@Tooltip": "List of entity IDs (e.g. minecraft:cow) whose sounds are silenced.",
+
   "text.autoconfig.simplequalityoflife.option.qOL.nametagMuteSuffixes": "Nametag Mute Suffixes",
   "text.autoconfig.simplequalityoflife.option.qOL.nametagMuteSuffixes.@Tooltip": "List of name suffixes. Mobs named with one of these will be silenced.",
+
+  "text.autoconfig.simplequalityoflife.option.qOL.nametagBabySuffixes": "Baby Suffixes",
+  "text.autoconfig.simplequalityoflife.option.qOL.nametagBabySuffixes.@Tooltip": "Babies named with one of these suffixes will never grow up (e.g., _baby).",
+
   "text.autoconfig.simplequalityoflife.option.qOL.preventFarmlandTrampleWithFeatherFalling": "Feather Falling Protects Farmland",
   "text.autoconfig.simplequalityoflife.option.qOL.preventFarmlandTrampleWithFeatherFalling.@Tooltip": "If enabled, players with Feather Falling boots will not trample farmland.",
-  "text.autoconfig.simplequalityoflife.option.qOL.ladderClimbingSpeed": "Ladder Climbing Speed",
-  "text.autoconfig.simplequalityoflife.option.qOL.ladderClimbingSpeed.@Tooltip": "Adjusts the vertical speed when climbing ladders. Vanilla default is ~0.2.",
-  "text.autoconfig.simplequalityoflife.option.qOL.enableFastLadderSlide": "Fast Ladder Slide",
-  "text.autoconfig.simplequalityoflife.option.qOL.enableFastLadderSlide.@Tooltip": "If enabled, allows faster sliding down ladders.",
-  "text.autoconfig.simplequalityoflife.option.qOL.ladderSlideSpeed": "Ladder Slide Speed",
-  "text.autoconfig.simplequalityoflife.option.qOL.ladderSlideSpeed.@Tooltip": "Adjusts the vertical speed when sliding down ladders. Vanilla default is ~0.125.",
-  "text.autoconfig.simplequalityoflife.option.qOL.ladderSlideActivation": "Slide Activation Mode",
-  "text.autoconfig.simplequalityoflife.option.qOL.ladderSlideActivation.@Tooltip": "Determines how ladder sliding is activated.",
+
   "text.autoconfig.simplequalityoflife.option.qOL.sharpnessCutsGrass": "Sharpness Cuts Grass",
   "text.autoconfig.simplequalityoflife.option.qOL.sharpnessCutsGrass.@Tooltip": "If enabled, Sharpness III+ weapons cut through grass/flowers when attacking entities.",
 
-
-  "key.categories.simplequalityoflife": "Simple Quality of Life",
-  "key.category.simplequalityoflife.general": "Simple Quality of Life - General",
-  "key.simplequalityoflife.autowalk": "Auto Walk",
-
-  "commands.simplequalityoflife.killboats.success": "Removed %s empty boats.",
-  "commands.simplequalityoflife.killcarts.success": "Removed %s empty minecarts.",
-
-
   "text.autoconfig.simplequalityoflife.option.qOL.enableHoeHarvest": "Hoe Replanting",
   "text.autoconfig.simplequalityoflife.option.qOL.enableHoeHarvest.@Tooltip": "Right-click fully grown crops with a hoe to harvest and replant them. Consumes durability.",
-  "text.autoconfig.simplequalityoflife.option.qOL.nametagBabySuffixes": "Baby Suffixes",
-  "text.autoconfig.simplequalityoflife.option.qOL.nametagBabySuffixes.@Tooltip": "Babies named with one of these suffixes will never grow up (e.g., _baby).",
-  "text.autoconfig.simplequalityoflife.option.visuals.heldItemTooltips": "Held Item Tooltips",
-    "text.autoconfig.simplequalityoflife.option.visuals.heldItemTooltips.enable": "Enable Held Item Tooltips",
-    "text.autoconfig.simplequalityoflife.option.visuals.heldItemTooltips.showDurability": "Show Durability",
-    "text.autoconfig.simplequalityoflife.option.visuals.heldItemTooltips.showEnchantments": "Show Enchantments",
-    "text.autoconfig.simplequalityoflife.option.visuals.heldItemTooltips.maxEnchantments": "Max Enchantments to Show",
+
+  "text.autoconfig.simplequalityoflife.option.qOL.enableFurnaceLavaFill": "Fill Furnace with Lava",
+  "text.autoconfig.simplequalityoflife.option.qOL.enableFurnaceLavaFill.@Tooltip": "Right-click a furnace (or blast furnace/smoker) with a lava bucket to insert it as fuel and receive an empty bucket.",
+
+  "text.autoconfig.simplequalityoflife.option.qOL.ladderClimbingSpeed": "Ladder Climbing Speed",
+  "text.autoconfig.simplequalityoflife.option.qOL.ladderClimbingSpeed.@Tooltip": "Adjusts the vertical speed when climbing ladders. Vanilla default is ~0.2.",
+
+  "text.autoconfig.simplequalityoflife.option.qOL.enableFastLadderSlide": "Fast Ladder Slide",
+  "text.autoconfig.simplequalityoflife.option.qOL.enableFastLadderSlide.@Tooltip": "If enabled, allows faster sliding down ladders.",
+
+  "text.autoconfig.simplequalityoflife.option.qOL.ladderSlideSpeed": "Ladder Slide Speed",
+  "text.autoconfig.simplequalityoflife.option.qOL.ladderSlideSpeed.@Tooltip": "Adjusts the vertical speed when sliding down ladders.",
+
+  "text.autoconfig.simplequalityoflife.option.qOL.ladderSlideActivation": "Slide Activation Mode",
+  "text.autoconfig.simplequalityoflife.option.qOL.ladderSlideActivation.@Tooltip": "Determines how ladder sliding is activated (CAMERA = look down + sneak, ALWAYS = look down unless sneaking).",
+
+  "text.autoconfig.simplequalityoflife.option.qOL.vaultCooldownDays": "Vault Cooldown (Days)",
+  "text.autoconfig.simplequalityoflife.option.qOL.vaultCooldownDays.@Tooltip": "Time in Minecraft days until a player can loot a vault again.",
+
   "text.autoconfig.simplequalityoflife.option.qOL.enableFullDurabilityBonus": "Full Durability Bonus",
   "text.autoconfig.simplequalityoflife.option.qOL.enableFullDurabilityBonus.@Tooltip": "Grants a bonus to mining speed and damage when tools/weapons are near full durability.",
+
   "text.autoconfig.simplequalityoflife.option.qOL.fullDurabilityThreshold": "Durability Threshold (0.0 - 1.0)",
-  "text.autoconfig.simplequalityoflife.option.qOL.fullDurabilityThreshold.@Tooltip": "The percentage of durability required to trigger the bonus (e.g., 0.9 for 90%).",
+  "text.autoconfig.simplequalityoflife.option.qOL.fullDurabilityThreshold.@Tooltip": "The fraction of durability required to trigger the bonus (e.g., 0.9 for 90%).",
+
   "text.autoconfig.simplequalityoflife.option.qOL.fullDurabilityBonusMultiplier": "Bonus Multiplier",
   "text.autoconfig.simplequalityoflife.option.qOL.fullDurabilityBonusMultiplier.@Tooltip": "The multiplier applied to speed/damage (e.g., 1.15 for +15%).",
+
   "text.autoconfig.simplequalityoflife.option.qOL.piglinsIgnoreGoldTrims": "Piglins Ignore Gold Trims",
   "text.autoconfig.simplequalityoflife.option.qOL.piglinsIgnoreGoldTrims.@Tooltip": "Piglins won't attack if you wear armor with gold trims.",
 
   "text.autoconfig.simplequalityoflife.option.qOL.piglinsIgnoreGoldTools": "Piglins Ignore Gold Tools",
   "text.autoconfig.simplequalityoflife.option.qOL.piglinsIgnoreGoldTools.@Tooltip": "Piglins won't attack if you hold gold tools or weapons.",
 
-  "text.autoconfig.simplequalityoflife.option.qOL.rainProbability": "Rain Probability (Server)",
-  "text.autoconfig.simplequalityoflife.option.qOL.rainProbability.@Tooltip": "Chance for rain to occur.\n100 = Normal behavior\n0 = Rain is always cancelled.",
+  "text.autoconfig.simplequalityoflife.option.qOL.disableWeather": "Disable Weather (Server)",
+  "text.autoconfig.simplequalityoflife.option.qOL.disableWeather.@Tooltip": "Stops rain and thunder from occurring and clears active weather. Server-side.",
 
   "text.autoconfig.simplequalityoflife.option.qOL.clientRainParticleDensity": "Rain Disturbance (Client)",
   "text.autoconfig.simplequalityoflife.option.qOL.clientRainParticleDensity.@Tooltip": "Reduces rain particles and sounds.\n100 = All particles/sounds\n0 = No particles/sounds (Silent).",
 
-  "text.autoconfig.simplequalityoflife.option.qOL.clientRainVolume": "Rain Volume (Placeholder)",
-  "text.autoconfig.simplequalityoflife.option.qOL.clientRainVolume.@Tooltip": "Not implemented yet (use Rain Density).",
-
-  "text.autoconfig.simplequalityoflife.option.frostWalkerWalkOnPowderSnow": "Frost Walker Walk on Powder Snow",
-    "text.autoconfig.simplequalityoflife.option.frostWalkerWalkOnPowderSnow.@Tooltip": "Allows players wearing Frost Walker boots to walk on powder snow without sinking."
-
+  "key.category.simplequalityoflife.general": "Simple Quality of Life - General",
+  "key.category.simplequalityoflife.main": "Simple Quality of Life",
+  "key.simplequalityoflife.autowalk": "Auto Walk",
+  "key.simplequalityoflife.crawl": "Crawl"
 }

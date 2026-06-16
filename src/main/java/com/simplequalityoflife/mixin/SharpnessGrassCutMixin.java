@@ -1,15 +1,14 @@
 package com.simplequalityoflife.mixin;
 
 import com.simplequalityoflife.Simplequalityoflife;
+import com.simplequalityoflife.util.VegetationUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -27,6 +26,8 @@ public class SharpnessGrassCutMixin {
         if (!Simplequalityoflife.getConfig().qOL.sharpnessCutsGrass) return;
 
         PlayerEntity player = (PlayerEntity) (Object) this;
+        // attack() runs on both sides; breaking blocks on the client desyncs and spawns ghost drops.
+        if (player.getEntityWorld().isClient()) return;
         ItemStack mainHand = player.getMainHandStack();
         boolean isWeapon = mainHand.isIn(ItemTags.SWORDS) || mainHand.isIn(ItemTags.AXES);
 
@@ -54,20 +55,7 @@ public class SharpnessGrassCutMixin {
         for (BlockPos pos : BlockPos.iterate(min, max)) {
             BlockState state = player.getEntityWorld().getBlockState(pos);
 
-            // Dieselbe erweiterte Logik wie im OutlineMixin
-            boolean isVegetation = state.isIn(BlockTags.FLOWERS)
-                    || state.getBlock() == Blocks.SHORT_GRASS
-                    || state.getBlock() == Blocks.TALL_GRASS
-                    || state.getBlock() == Blocks.FERN
-                    || state.getBlock() == Blocks.LARGE_FERN
-                    || state.getBlock() == Blocks.DEAD_BUSH
-                    || state.getBlock() == Blocks.PINK_PETALS
-                    || state.getBlock() == Blocks.NETHER_SPROUTS
-                    || state.getBlock() == Blocks.CRIMSON_ROOTS
-                    || state.getBlock() == Blocks.WARPED_ROOTS
-                    || state.isIn(BlockTags.REPLACEABLE);
-
-            if (isVegetation) {
+            if (VegetationUtil.isCuttable(state)) {
                 // Block abbauen und Drops fallen lassen (true)
                 player.getEntityWorld().breakBlock(pos, true, player);
             }

@@ -68,6 +68,9 @@ public abstract class LadderSpeedMixin {
     private void modifyClimbingSpeedUp(Vec3d motion, CallbackInfoReturnable<Vec3d> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
+        // Nur Spieler (wie beim Slide-Pfad) – sonst bekämen auch Mobs den Klettertempo-Boost.
+        if (!(entity instanceof PlayerEntity)) return;
+
         // Basic Checks
         if (!entity.isClimbing()) return;
         if (entity.isSneaking()) return; // Shift = Anhalten
